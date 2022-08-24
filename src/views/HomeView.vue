@@ -1,7 +1,7 @@
 <template>
   <main>
     <div>Welcome to todo list</div>
-    <AddTodo></AddTodo>
+    <AddTodo v-on:percentEvent="handlePercent"></AddTodo>
     <a-progress :percent="percent" :status="progressStatus" size="default" :show-info="false" />
     <TodoList></TodoList>
   </main>
@@ -25,7 +25,11 @@ export default {
     created(){
       this.percent = 10
     },
-
+    methods : {
+      handlePercent(data){
+        this.percent = data
+      }
+    }
 }
 </script>
 <style >
