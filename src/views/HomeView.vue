@@ -1,15 +1,15 @@
 <template>
   <main>
-    <div>Welcome to todo list</div>
+    <div>{{title}}</div>
     <AddTodo v-on:addTodoEvent="handleAddTodo" :data="data"></AddTodo>
     <a-progress
-      :percent="percent"
+      :percent="progress"
       :status="progressStatus"
       size="default"
       :show-info="false"
     />
     <div class="tab">
-      <div class="tab__left">{{this.data.filter((each) => !each.isDone).length}} item left</div>
+      <div class="tab__left">{{count}} item left</div>
       <div class="tab__right">
         <button :class="tabActive !== 'All' && 'unactive'" @click="tabActive = 'All'">All</button>
         <button :class="tabActive !== 'Active' && 'unactive'" @click="tabActive = 'Active'">Active</button>
@@ -17,13 +17,13 @@
       </div>
     </div>
     <TodoList
-      :data="fillData"
+      :data="todos"
       @deleteTodoEvent="handleDeteleTodo"
       @changeDataEvent="handleChangeData"
     ></TodoList>
     <div class="footer">
       <button @click="handleDeleteDone">Delete All Done</button>
-      <button @click="syncData">syncData</button>
+      <!-- <button @click="syncData">syncData</button> -->
     </div>
   </main>
 </template>
@@ -45,45 +45,47 @@ export default {
   components: { AddTodo, TodoList },
   methods: {
     handleAddTodo(data) {
-      this.data.push({ name: data, isDone: false });
+      this.$store.commit('addTodo',{ name: data, isDone: false });
     },
     handleDeteleTodo(data) {
-      this.data = this.data.filter((each) => {
-        return each.name !== data;
-      });
+      this.$store.commit('deleteTodo',data);
+      
     },
     handleChangeData(data) {
-      this.data = data;
+      this.$store.commit('changeTodos',data);
     },
     handleDeleteDone(){
-      this.data = this.data.filter((each) => !each.isDone)
+      this.$store.commit('deleteAllDone')
+      // this.$store.dispatch('test')
     },
     syncData() {
+      this.$router.replace({name : 'about'})
     }
   },
   computed: {
-    handleProgress() {
-      const isDoneData = this.data.filter((each) => each.isDone);
-      return isDoneData.length === 0
-        ? 0
-        : (isDoneData.length / this.data.length) * 100;
+    progress() {
+      return this.$store.getters.progress
     },
     handleStatusProgress() {
-      const isDoneData = this.data.filter((each) => each.isDone)
-      if(isDoneData.length/this.data.length === 1){
-        return "success"
-      }else{
-        return "normal"
-      }
+      return this.$store.getters.progressStatus
     },
     fillData(){
+      
+    },
+    todos(){
       if(this.tabActive === "Active"){
-        return this.data.filter((each) => !each.isDone)
+        return this.$store.getters.active
       }else if(this.tabActive === "Completed"){
-        return this.data.filter((each) => each.isDone)
+        return this.$store.getters.completed
       }else{
-        return this.data
+        return this.$store.state.todos
       }
+    },
+    count(){
+      return this.$store.getters.countActive
+    },
+    title(){
+      return this.$store.state.TITLE.data
     }
   },
   mounted() {
@@ -99,7 +101,7 @@ export default {
   },
 };
 </script>
-<style >
+<style type="">
 main {
   width: 50vw;
   height: 50vh;

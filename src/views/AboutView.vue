@@ -1,7 +1,6 @@
-
 <template>
   <div class="about">
-    <h1>{{title}}</h1> 
+    <h1>{{query}}</h1> 
     <AboutContentVue v-bind:content="content" v-on:deleteContentEvent="handleDelete"></AboutContentVue>
   </div>
 </template>
@@ -12,10 +11,11 @@ import AboutContentVue from '../components/AboutContent.vue';
     name : 'about',
     data() {
       return {
-        title : 'This is a title',
+        title : 'Hello',
         content : [{stt : 1, name : 'Mot'}, {stt : 2, name : 'Hai'}, {stt : 3, name : 'Ba'}]
       }
     },
+    props : ['query'],
     components : {
       AboutContentVue
     },

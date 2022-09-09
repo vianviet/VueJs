@@ -43,11 +43,13 @@ export default {
       });
     },
     handleEdit(){
+      if(this.input !== ''){
         this.$emit("changeItemEvent", {index : this.index, data : {
             name: this.input,
             isDone: this.item.isDone,
       }});
       this.isEdit = false
+      }
     },
     onChange(e) {
         this.input = e.target.value

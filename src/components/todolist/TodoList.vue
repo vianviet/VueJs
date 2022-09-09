@@ -20,7 +20,7 @@ export default {
         this.$emit('deleteTodoEvent',data)
       },
       handleChangeItem(data){
-        const newData = this.data.map((each, index) => {
+        const newData = this.$store.state.todos.map((each, index) => {
           if(index === data.index){
             return data.data
           }else{

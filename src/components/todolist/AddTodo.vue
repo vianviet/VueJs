@@ -1,68 +1,70 @@
 <template>
-    <div class="add-todo">
-      <a-form-item :help="isError && errorMessage">
-        <a-input
+  <div class="add-todo">
+    <a-form-item :help="errorMessage">
+      <a-input
         :class="isError && 'error'"
-        placeholder="Please input your todo"
-        v-on:change="handleChange"
+        placeholder="What needs to be done?"
+        @change="handleChange"
         @pressEnter="handleEnterSubmit"
         :value="input"
       />
-      </a-form-item>
-      <a-button type="primary" @click="submit">
-        Add
-      </a-button>
-    </div>
+    </a-form-item>
+  </div>
 </template>
 
 <script>
 export default {
- data() {
+  data() {
     return {
-        input : '',
-        isError : true,
-        errorMessage : ''
+      input: "",
+      isError: false,
+      errorMessage: "",
     };
   },
-  methods : {
+  methods: {
     submit() {
-        if(!this.isError){
-          this.$emit('addTodoEvent',this.input)
-        this.input = ''
-        }
+      if (this.input === "") {
+            this.isError = true;
+            this.errorMessage = "Please input before submit"
+          }
+      if (!this.isError) {
+        this.$emit("addTodoEvent", this.input);
+        this.input = "";
+      } 
     },
-    handleChange(e){
-        this.input = e.target.value
+    handleChange(e) {
+      this.isError = false;
+      this.errorMessage = ""
+      this.input = e.target.value;
     },
-    handleEnterSubmit(e){
-            this.submit()
+    handleEnterSubmit(e) {
+      this.submit();
     },
-    existTodo(name){
-      
-    }
+    existTodo(name) {},
   },
-  mounted(){
-    this.$watch('input',() => {
-      if(this.input === ''){
-        this.isError = true
-      }else{
-        this.isError = false
-      }
-    })
-  }
-}
+  mounted() {},
+};
 </script>
 
-<style>
- .add-todo{
-    display: flex;
-    gap : 20px;
- }
- .error {
+<style scoped>
+.add-todo {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+.ant-row {
+  width: 100%;
   
-  border-color: red !important;;
- }
- .ant-form-item-with-help .ant-form-item-explain{
-color: red!important;;
- }
+}
+.error {
+  border-color: red !important;
+}
+.ant-form-item-with-help .ant-form-item-explain {
+  color: red !important;
+}
+.ant-input{
+  padding: 5px 100px!important;
+  height: 40px;
+  border-bottom: 5px solid  gainsboro;
+}
 </style>

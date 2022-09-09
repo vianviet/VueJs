@@ -22,6 +22,7 @@ import { RouterLink, RouterView } from 'vue-router'
 header {
   line-height: 1.5;
   max-height: 100vh;
+  /* height: 2000px; */
 }
 
 .logo {
